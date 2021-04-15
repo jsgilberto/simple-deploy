@@ -3,17 +3,30 @@
     become: yes
     apt:
       update_cache: yes
+    register: result
+  
+  - debug:
+      var: result
+      verbosity: 2
 
   - name: Upgrade packages.
     become: yes
     apt:
       upgrade: yes
   
-  - name: Install python.
+  - name: Install packages.
     become: yes
     apt: 
-      name: python3-pip
+      pkg:
+      - python3-pip
+      - supervisor
+      # name: python3-pip
   
+  - name: Restart supervisor
+    ansible.builtin.service:
+      name: supervisor
+      state: restarted
+
   - name: Upgrade pip.
     become: yes
     shell: python3 -m pip install --upgrade pip
@@ -24,5 +37,12 @@
 
   - name: Git clone.
     ansible.builtin.git:
-      repo: 
-      dest: ~/
+      repo: https://github.com/jsgilberto/simple-deploy.git
+      dest: ~/simple-deploy
+  
+  - name: Install python dependencies
+    shell:
+      cmd: pipenv run python src/app.py
+      chdir: ~/simple-deploy
+  
+  - name: 

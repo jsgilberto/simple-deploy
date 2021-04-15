@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ansible = "*"
 flask = "*"
+gunicorn = "*"
 
 [dev-packages]
 

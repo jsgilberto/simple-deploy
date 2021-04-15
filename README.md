@@ -9,3 +9,9 @@ aws ec2 describe-instances \
    --filters "Name=tag:name,Values=udacity" \
    --output text >> inventory
 ```
+
+
+To run locally:
+```sh
+ansible-playbook ansible/main-remote.yml --verbose --ask-become-pass
+```
