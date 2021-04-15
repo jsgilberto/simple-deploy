@@ -1,0 +1,28 @@
+---
+  - name: Update apt packages.
+    become: yes
+    apt:
+      update_cache: yes
+
+  - name: Upgrade packages.
+    become: yes
+    apt:
+      upgrade: yes
+  
+  - name: Install python.
+    become: yes
+    apt: 
+      name: python3-pip
+  
+  - name: Upgrade pip.
+    become: yes
+    shell: python3 -m pip install --upgrade pip
+  
+  - name: Install pipenv.
+    become: yes
+    shell: pip3 install pipenv
+
+  - name: Git clone.
+    ansible.builtin.git:
+      repo: 
+      dest: ~/
