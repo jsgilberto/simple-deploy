@@ -15,3 +15,9 @@ To run locally:
 ```sh
 ansible-playbook ansible/main-remote.yml --verbose --ask-become-pass
 ```
+
+
+/usr/local/bin/pipenv run gunicorn \
+   --workers 3 \
+   --bind 127.0.0.1:8000 app:app \
+   --pythonpath /home/ubuntu/simple-deploy/src/

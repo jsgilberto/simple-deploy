@@ -20,12 +20,6 @@
       pkg:
       - python3-pip
       - supervisor
-      # name: python3-pip
-  
-  - name: Restart supervisor
-    ansible.builtin.service:
-      name: supervisor
-      state: restarted
 
   - name: Upgrade pip.
     become: yes
@@ -42,7 +36,22 @@
   
   - name: Install python dependencies
     shell:
-      cmd: pipenv run python src/app.py
+      cmd: |
+        export PIPENV_VENV_IN_PROJECT=1
+        pipenv install
       chdir: ~/simple-deploy
   
-  - name: 
+  - name: Create supervisor configuration
+    become: yes
+    ansible.builtin.template:
+      src: files/flask_webapp_gunicorn.conf
+      dest: /etc/supervisor/conf.d/
+      mode: +x # chmod +x
+
+  - name: Reload supervisord
+    become: yes
+    shell: |
+      export PIPENV_PIPFILE=/home/ubuntu/simple-deploy/Pipfile
+      service supervisor restart
+      service supervisor start
+      supervisorctl reload
