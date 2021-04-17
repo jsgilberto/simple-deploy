@@ -1,6 +1,7 @@
 
 # Simple deployment on EC2 with Ansible
 
+In this project, a flask web app is configured in an EC2 instance using Ansible.
 
 
 ## Running Ansible
