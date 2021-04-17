@@ -17,13 +17,13 @@ AWS_RESPONSE=$(aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                 --filters "Name=tag:name,Values=udacity" \
                 --output text
-                )
+              )
 echo "AWS response: ${AWS_RESPONSE}"
 
 if [[ $? -ne 0 ]] || [[ -z "$AWS_RESPONSE" ]]; then
     # There was no response, so no such instance.
     echo "No instances found. Exiting with error code 1."
-    return 1        # 1 in Bash script means error/false
+    return 1
 fi
 
 echo "Appending AWS response to ${FILE}"

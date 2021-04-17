@@ -1,24 +1,33 @@
 
 # Simple deployment on EC2 with Ansible
 
-Command used for creating inventory file
 
+
+## Running Ansible
+
+### Locally
+
+Change hosts to localhost in `ansible/main-remote.yml`
+
+And run the following command:
 ```sh
-aws ec2 describe-instances \
-   --query 'Reservations[*].Instances[*].PublicIpAddress' \
-   --filters "Name=tag:name,Values=udacity" \
-   --output text >> inventory
+$ ansible-playbook ansible/main-remote.yml --verbose --ask-become-pass
 ```
 
+### Remote hosts:
 
-To run locally:
+First, we need to define an inventory file with all the IP addresses of the 
+instances where we want Ansible to connect, and for that, I created a shell
+script in the `ansible` directory within this project.
+
+To create the inventory file run the following in your terminal:
+
 ```sh
-ansible-playbook ansible/main-remote.yml --verbose --ask-become-pass
+$ ansible/create_inventory.sh
 ```
 
+Run the following command:
+
 ```sh
-/usr/local/bin/pipenv run gunicorn \
-   --workers 3 \
-   --bind 127.0.0.1:8000 app:app \
-   --pythonpath /home/ubuntu/simple-deploy/src/
+$ ansible-playbook ansible/main-remote.yml -i $FILE --private-key $YOUR_KEY_PATH
 ```
