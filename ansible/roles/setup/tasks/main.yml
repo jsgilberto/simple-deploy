@@ -1,52 +1,72 @@
 ---
-  - name: Update apt packages.
+  - name: "[SETUP] Update apt packages."
     become: yes
     apt:
       update_cache: yes
 
-  - name: Upgrade packages.
+  - name: "[SETUP] Upgrade packages."
     become: yes
     apt:
       upgrade: yes
   
-  - name: Install packages.
+  - name: "[SETUP] Installing pip3 and supervisor..."
     become: yes
     apt: 
       pkg:
       - python3-pip
       - supervisor
 
-  - name: Upgrade pip.
+  - name: "[SETUP] Upgrading pip..."
     become: yes
     shell: python3 -m pip install --upgrade pip
   
-  - name: Install pipenv.
+  - name: "[SETUP] Installing pipenv..."
     become: yes
     shell: pip3 install pipenv
 
-  - name: Git clone.
+  - name: "[SETUP] Cloning project from Github repository..."
     ansible.builtin.git:
       repo: https://github.com/jsgilberto/simple-deploy.git
       dest: ~/simple-deploy
   
-  - name: Install python dependencies
+  - name: "[SETUP] Installing python project dependencies..."
     shell:
       cmd: |
         export PIPENV_VENV_IN_PROJECT=1
         pipenv install
       chdir: ~/simple-deploy
   
-  - name: Create supervisor configuration
+  - name: "[SUPERVISORD] Adding custom configuration file..."
     become: yes
     ansible.builtin.template:
       src: files/flask_webapp_gunicorn.conf
       dest: /etc/supervisor/conf.d/
       mode: +x # chmod +x
 
-  - name: Reload supervisord
+  - name: "[SUPERVISORD] Reloading..."
     become: yes
     shell: |
       export PIPENV_PIPFILE=/home/ubuntu/simple-deploy/Pipfile
       service supervisor restart
       service supervisor start
       supervisorctl reload
+
+  - name: "[NGINX] Installing..."
+    become: yes
+    apt: 
+      pkg:
+      - nginx
+
+  - name: "[NGINX] Removing default config..." 
+    become: yes
+    shell: rm -f /etc/nginx/sites-enabled/default
+
+  - name: "[NGINX] Adding custom configuration file..."
+    become: yes
+    ansible.builtin.template:
+      src: files/nginx-flask.conf
+      dest: /etc/nginx/conf.d/
+  
+  - name: "[NGINX] Restarting..."
+    become: yes
+    shell: service nginx restart
