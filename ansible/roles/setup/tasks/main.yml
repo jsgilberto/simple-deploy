@@ -3,11 +3,6 @@
     become: yes
     apt:
       update_cache: yes
-    register: result
-  
-  - debug:
-      var: result
-      verbosity: 2
 
   - name: Upgrade packages.
     become: yes
