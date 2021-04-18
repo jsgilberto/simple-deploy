@@ -15,7 +15,7 @@ echo "Creating new inventory file located in: ${FILE}"
 echo "[all]" >> $FILE
 AWS_RESPONSE=$(aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                --filters "Name=tag:name,Values=udacity" \
+                --filters "Name=tag:name,Values=simple-deploy" \
                 --output text
               )
 echo "AWS response: ${AWS_RESPONSE}"
