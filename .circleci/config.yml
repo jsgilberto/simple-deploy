@@ -8,7 +8,7 @@ jobs:
       - checkout # check out the code in the project directory
       - run:
           name: Installing make
-          command: sudo apt install make -y
+          command: apt install make -y
       - run:
           name: Deploying stack to AWS
           command: make deploy
