@@ -43,5 +43,7 @@ For the deployment I decided to use an EC2 instance with ubuntu 18.
 ```sh
 aws cloudformation deploy \
     --template-file infrastructure/server.yml \
-    --stack-name simple-deploy
+    --stack-name simple-deploy \
+    --region us-east-1 \
+    --profile personal
 ```

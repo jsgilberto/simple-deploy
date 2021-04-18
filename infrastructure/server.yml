@@ -8,7 +8,7 @@ Resources:
     Properties:
       SecurityGroups:
         - !Ref InstanceSecurityGroup
-      KeyName: ec2-instance-key-pair
+      KeyName: ec2-simple-deploy-key
       ImageId: 'ami-013f17f36f8b1fefb'
       Tags:
         - Key: name
