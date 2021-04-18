@@ -30,5 +30,5 @@ $ ansible/create_inventory.sh
 Run the following command:
 
 ```sh
-$ ansible-playbook ansible/main-remote.yml -i $FILE --private-key $YOUR_KEY_PATH
+$ ansible-playbook ansible/main-remote.yml -i $INVENTORY_FILE --private-key $EC2_KEY_PATH
 ```
