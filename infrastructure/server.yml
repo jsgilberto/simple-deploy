@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Infrastructure for simple-deploy
+
+Resources:
+
+  Ec2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      KeyName: ec2-instance-key-pair
+      ImageId: 'ami-013f17f36f8b1fefb'
+      Tags:
+        - Key: name
+          Value: simple-deploy
+  
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: name
+          Value: simple-deploy
+
+Outputs:
+
+  EC2DNS:
+    Description: EC2 instance DNS Name
+    Value: !Ref Ec2Instance
+    Export: 
+      Name: ec2-dns
