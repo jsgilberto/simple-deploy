@@ -32,3 +32,16 @@ Run the following command:
 ```sh
 $ ansible-playbook ansible/main-remote.yml -i $INVENTORY_FILE --private-key $EC2_KEY_PATH
 ```
+
+## Infrastructure
+
+### Cloudformation
+
+The deployment of this project is done through AWS Cloudformation.
+For the deployment I decided to use an EC2 instance with ubuntu 18.
+
+```sh
+aws cloudformation deploy \
+    --template-file infrastructure/server.yml \
+    --stack-name simple-deploy
+```
