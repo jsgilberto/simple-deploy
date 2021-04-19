@@ -7,9 +7,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Installing tar
+          name: Installing tar & gzip
           command: |
             yum install -y tar
+            yum install -y gzip
       - run:
           name: Building infrastructuring on AWS
           command: |
