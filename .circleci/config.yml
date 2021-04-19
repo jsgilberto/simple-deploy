@@ -44,6 +44,7 @@ jobs:
       - run:
           name: Configuring server
           command: |
+            ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook ansible/main-remote.yml \
             -i ansible/inventory
 
