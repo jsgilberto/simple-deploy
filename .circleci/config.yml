@@ -52,8 +52,16 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - build-infrastructure
+      - build-infrastructure:
+          filters:
+            branches:
+              only:
+                - master
       - configure-infrastructure:
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - build-infrastructure
       
