@@ -7,6 +7,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Installing tar
+          command: |
+            yum install -y tar
+      - run:
           name: Building infrastructuring on AWS
           command: |
             aws cloudformation deploy \
