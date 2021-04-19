@@ -13,6 +13,13 @@ jobs:
             --template-file infrastructure/server.yml \
             --stack-name simple-deploy \
             --region us-east-1
+      - run:
+          name: Creating inventory file
+          command: ./ansible/create_inventory.sh
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   
   configure-infrastructure:
     working_directory: ~/simple-deploy
@@ -20,6 +27,8 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - add_ssh_keys:
           fingerprints:
             - "58:e7:6c:40:07:67:3f:43:e0:9b:49:d2:16:ea:16:42"
@@ -27,9 +36,6 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible # install the dependencies needed for your playbook
-      - run:
-          name: Creating inventory file
-          command: ./ansible/create_inventory.sh
       - run:
           name: Configuring server
           command: |
