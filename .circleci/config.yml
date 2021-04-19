@@ -1,22 +1,47 @@
 version: 2.1
 jobs:
-  deploy:
+  build-infrastructure:
     working_directory: ~/simple-deploy
     docker:
-      - image: amazon/aws-cli # the primary container, where your job's commands are run
+      - image: amazon/aws-cli
     steps:
-      - checkout # check out the code in the project directory
+      - checkout
       - run:
-          name: Deploying stack to AWS
+          name: Building infrastructuring on AWS
           command: |
             aws cloudformation deploy \
             --template-file infrastructure/server.yml \
             --stack-name simple-deploy \
             --region us-east-1
-      
+  
+  configure:
+    working_directory: ~/simple-deploy
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "58:e7:6c:40:07:67:3f:43:e0:9b:49:d2:16:ea:16:42"
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible # install the dependencies needed for your playbook
+      - run:
+          name: Creating inventory file
+          command: ./ansible/create_inventory.sh
+      - run:
+          name: Configuring server
+          command: |
+            ansible-playbook ansible/main-remote.yml \
+            -i ansible/inventory
+
 workflows:
   version: 2
-  build_and_test:
+  deploy:
     jobs:
-      - deploy
+      - build-infrastructure
+      - configure-infrastructure:
+          requires:
+            - build-infrastructure
       
