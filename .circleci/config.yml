@@ -56,12 +56,12 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
       - configure-infrastructure:
           filters:
             branches:
               only:
-                - master
+                - main
           requires:
             - build-infrastructure
       
